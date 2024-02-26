@@ -18,6 +18,16 @@ const fs = require("fs");
 const { exec } = require("node:child_process");
 const app = express();
 
+// set up rate limiter: maximum of five requests per minute
+var RateLimit = require('express-rate-limit');
+var limiter = RateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // max 100 requests per windowMs
+});
+
+// apply rate limiter to all requests
+app.use(limiter);
+
 app.use(bodyParser.json());
 app.use(bodyParser.text({ type: "application/xml" }));
 
@@ -25,16 +35,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 app.post("/ufo/upload", upload.single("file"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).send("No file uploaded.");
-  }
-
-  console.log("Received uploaded file:", req.file.originalname);
-
-  const uploadedFilePath = path.join(__dirname, req.file.originalname);
-  fs.writeFileSync(uploadedFilePath, req.file.buffer);
-
-  res.status(200).send("File uploaded successfully.");
+  return res.status(501).send("Not Implemented.");
 });
 
 app.post("/ufo", (req, res) => {
@@ -46,9 +47,9 @@ app.post("/ufo", (req, res) => {
   } else if (contentType === "application/xml") {
     try {
       const xmlDoc = libxmljs.parseXml(req.body, {
-        replaceEntities: true,
-        recover: true,
-        nonet: false,
+        replaceEntities: false, // Disabled the option to replace XML entities
+        recover: false, // Disabled the parser to recover from certain parsing errors
+        nonet: true, // Disabled network access when parsing
       });
 
       console.log("Received XML data from XMLon:", xmlDoc.toString());
