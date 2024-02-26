@@ -22,8 +22,6 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Check out code
-        uses: actions/checkout@v3
       - name: Check GitHub Status
         run: |
           echo "Checking GitHub Status"
