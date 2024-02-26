@@ -35,16 +35,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 app.post("/ufo/upload", upload.single("file"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).send("No file uploaded.");
-  }
-
-  console.log("Received uploaded file:", req.file.originalname);
-
-  const uploadedFilePath = path.join(__dirname, req.file.originalname);
-  fs.writeFileSync(uploadedFilePath, req.file.buffer);
-
-  res.status(200).send("File uploaded successfully.");
+  return res.status(501).send("Not Implemented.");
 });
 
 app.post("/ufo", (req, res) => {
