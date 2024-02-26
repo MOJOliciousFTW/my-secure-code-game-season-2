@@ -26,7 +26,7 @@ jobs:
         run: |
           echo "Checking GitHub Status"
           # Run the curl command and save the output (the HTTP status code) in a variable
-          status_code=$(curl -s -o /dev/null -w "%{http_code}" https://githubstatus.com/api/v2/status.json)
+          status_code=$(curl -s -o /dev/null -w "%{http_code}" https://www.githubstatus.com/api/v2/status.json )
 
           # Compare the status code with 200 OK
           if [ $status_code -ne 200 ]; then
